@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  discordUsername String  @id
+  sent Transaction[] @relation("sender")
+  received Transaction[] @relation("receiver")
+  pointsSent Int
+  pointsReceived Int
+  balance Int
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+  sender User @relation(fields: [senderId], references: [discordUsername], name: "sender")
+  senderId String
+  receiver User @relation(fields: [receiverId], references: [discordUsername], name: "receiver")
+  receiverId String
+  points Int
+  description String
+  link String
+  domain Domain @relation(fields: [domainId], references: [name])
+  domainId String
+}
+model Domain {
+  name String @id
+  transactions Transaction[]
+}
