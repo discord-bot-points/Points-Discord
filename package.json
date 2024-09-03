@@ -1,11 +1,21 @@
+
 {
 	"devDependencies": {
 		"@types/node": "^22.5.2",
 		"prisma": "^5.19.1",
 		"ts-node": "^10.9.2",
+		"tsup": "^8.2.4",
+		"tsx": "^4.19.0",
 		"typescript": "^5.5.4"
 	},
 	"dependencies": {
-		"@prisma/client": "5.19.1"
-	}
+		"@prisma/client": "5.19.1",
+		"discord.js": "^14.16.1",
+		"dotenv": "^16.4.5"
+	},
+  "scripts":{
+    "dev": "tsx watch src/bot.ts",
+  "start": "node dist/bot.js",
+  "build": "tsup src/bot.ts --minify"
+  }
 }
