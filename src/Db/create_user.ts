@@ -5,10 +5,10 @@ const prisma = new PrismaClient()
 async function main() {
   const user = await prisma.user.create({
     data: {
-      discordUsername: "Ithara",
-      balance: 5000,
+      discordUsername: "ithara",
+      balance: 2500,
       pointsReceived: 5000,
-      pointsSent: 0,
+      pointsSent: 2500,
     },
   })
   console.log(user)
