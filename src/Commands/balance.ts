@@ -5,11 +5,16 @@ const prisma = new PrismaClient();
 
 export const data = new SlashCommandBuilder()
   .setName("balance")
-  .setDescription("Affiche ta balance de points");
-
+  .setDescription("Affiche ta balance de points")
+  .addUserOption(option =>
+    option.setName("user")
+    .setDescription("Voir les points de cet utilisateur")
+    .setRequired(false)
+  )
+  
 export async function execute(interaction: CommandInteraction) {
-  const discordUsername = interaction.user.username.toLowerCase();
-  console.log("Nom Discord", discordUsername)
+  const targetUser = interaction.options.getUser('user') || interaction.user;
+  const discordUsername = targetUser.username.toLowerCase();
 
   try {
     let user = await prisma.user.findUnique({
@@ -30,7 +35,7 @@ export async function execute(interaction: CommandInteraction) {
     }
 
     await interaction.reply({
-      content: `Votre balance actuelle est de ${user.balance} points`,
+      content: `la balance actuelle de ${user.discordUsername} est de ${user.balance} points`,
       ephemeral: true,
     });
   } catch (error) {
