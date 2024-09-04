@@ -35,7 +35,7 @@ export async function execute(interaction: CommandInteraction) {
     }
 
     await interaction.reply({
-      content: `la balance actuelle de ${user.discordUsername} est de ${user.balance} points`,
+      content: `La balance actuelle de ${user.discordUsername} est de ${user.balance} points`,
       ephemeral: true,
     });
   } catch (error) {
