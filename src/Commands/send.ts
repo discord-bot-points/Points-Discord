@@ -1,5 +1,5 @@
 import { PrismaClient, User, Domain, Transaction } from "@prisma/client";
-import { CommandInteraction, SlashCommandBuilder, TextChannel, Client } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder, TextChannel } from "discord.js";
 
 const prisma = new PrismaClient();
 
