@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder, EmbedBuilder } from "discord.js";
 
 const prisma = new PrismaClient();
 
@@ -34,10 +34,21 @@ export async function execute(interaction: CommandInteraction) {
       console.log("Utilisateur créé", user)
     }
 
-    await interaction.reply({
-      content: `La balance actuelle de ${user.discordUsername} est de ${user.balance} points`,
-      ephemeral: true,
-    });
+    const helpEmbed = new EmbedBuilder()
+    .setColor(4772300)
+    .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
+    .addFields(
+      { name: '\u2009', value: '\u2009' },
+      { name: `Balance de ${targetUser.globalName}`, value: `La balance actuelle de <@${targetUser.id}> est de ${user.balance} points` },
+      { name: '\u2009', value: '\u2009' }
+    )
+    .setTimestamp();
+
+  await interaction.reply({
+    embeds: [helpEmbed],
+    ephemeral: true,
+  });
+
   } catch (error) {
     console.error('Erreur lors de la récupération de la balance', error);
     await interaction.reply({
