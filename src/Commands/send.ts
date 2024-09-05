@@ -1,5 +1,5 @@
 import { PrismaClient, User, Domain, Transaction } from "@prisma/client";
-import { CommandInteraction, SlashCommandBuilder, TextChannel } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder, TextChannel, EmbedBuilder } from "discord.js";
 
 const prisma = new PrismaClient();
 
@@ -32,6 +32,21 @@ export const data = new SlashCommandBuilder()
       .setRequired(false)
   );
 
+function getColor(points: number) {
+  if (points < 100) {
+    return 32768;
+  } else if (points >= 100 && points < 200) {
+    return 52945;
+  } else if (points >= 200 && points < 500) {
+    return 16766720;
+  } else if (points >= 500 && points < 1000) {
+    return 16753920;
+  } else if (points > 1000) {
+    return 16711680;
+  } else {
+    return 32768;
+  }
+}
 export async function execute(interaction: CommandInteraction) {
   const targetUser = interaction.options.getUser('user');
   const receiverUsername = targetUser.username;
@@ -129,13 +144,48 @@ export async function execute(interaction: CommandInteraction) {
         domainId: domainPick.name,
       },
     });
+    
+    const color = getColor(points);
+
+    const tradeEmbed = new EmbedBuilder()
+    .setColor(color)
+    .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
+    .addFields(
+      { name: '\u2009', value: '\u2009' },
+      { name: `${domainPick.name}`, value: `<@${senderUser.id}> a envoyé ${points} points à <@${targetUser.id}>` },
+      { name: '\u2009', value: '\u2009' }
+    )
+    .setTimestamp();
+
+    const updatedBalanceEmbed = new EmbedBuilder()
+    .setColor(color)
+    .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
+    .addFields(
+      { name: '\u2009', value: '\u2009' },
+      { name: `Your balance`, value: `~~${senderOldBalance} points~~  > ${updatedSender?.balance} points` },
+      { name: '\u2009', value: '\u2009' },
+      { name: `${targetUser.globalName}'s balance`, value: `~~${receiverOldBalance} points~~ > ${updatedReceiver?.balance} points` }
+    )
+    .addFields({ name: '\u2009', value: '\u2009' })
+    .setTimestamp();
+
+    const logsEmbed = new EmbedBuilder()
+    .setColor(color)
+    .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
+    .addFields(
+      { name: '\u2009', value: '\u2009' },
+      { name: `${domainPick.name}`, value: `<@${senderUser.id}> a envoyé ${points} points à <@${targetUser.id}>` },
+      { name: '\u2009', value: '\u2009' }
+    )
+    .setTimestamp();
+
 
     await interaction.reply({
-      content: `<@${senderUser.id}> a envoyé ${points} points à <@${targetUser.id}>`
+      embeds: [tradeEmbed],
     });
 
     await interaction.followUp({
-      content: `**YOUR BALANCE**\n ~~${senderOldBalance}~~ > ${updatedSender?.balance}\n **${receiverUsername} BALANCE**\n ~~${receiverOldBalance}~~ > ${updatedReceiver?.balance}`,
+      embeds: [updatedBalanceEmbed],
       ephemeral: true,
     })
 
@@ -143,7 +193,7 @@ export async function execute(interaction: CommandInteraction) {
     const channel = interaction.guild?.channels.cache.get(channelId) as TextChannel;
 
     if (channel) {
-      await channel.send(`${senderUser.globalName} a envoyé ${points} points à ${targetUser.globalName}`);
+      await channel.send({ embeds: [logsEmbed] });
     } else {
       console.error("Le canal n'existe pas");
     }

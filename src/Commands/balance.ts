@@ -34,7 +34,7 @@ export async function execute(interaction: CommandInteraction) {
       console.log("Utilisateur créé", user)
     }
 
-    const helpEmbed = new EmbedBuilder()
+    const balanceEmbed = new EmbedBuilder()
     .setColor(4772300)
     .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
     .addFields(
@@ -45,7 +45,7 @@ export async function execute(interaction: CommandInteraction) {
     .setTimestamp();
 
   await interaction.reply({
-    embeds: [helpEmbed],
+    embeds: [balanceEmbed],
     ephemeral: true,
   });
 
