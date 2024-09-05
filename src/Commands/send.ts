@@ -3,35 +3,6 @@ import { CommandInteraction, SlashCommandBuilder, TextChannel, EmbedBuilder } fr
 
 const prisma = new PrismaClient();
 
-export const data = new SlashCommandBuilder()
-  .setName("send")
-  .setDescription("Envoie des points à un autre utilisateur")
-  .addUserOption(option =>
-    option.setName("user")
-      .setDescription("la personne qui va recevoir les points")
-      .setRequired(true)
-  )
-  .addNumberOption(option =>
-    option.setName("points")
-      .setDescription("Le nombre de points que vous voulez envoyer")
-      .setRequired(true)
-  )
-  .addStringOption(option =>
-    option.setName("domain")
-      .setDescription("Le domaine de la transaction")
-      .setRequired(true)
-  )
-  .addStringOption(option =>
-    option.setName("description")
-      .setDescription("La description de la transaction")
-      .setRequired(false)
-  )
-  .addStringOption(option =>
-    option.setName("link")
-      .setDescription("Lien de la transaction")
-      .setRequired(false)
-  );
-
 function getColor(points: number) {
   if (points < 100) {
     return 32768;
