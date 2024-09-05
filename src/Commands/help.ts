@@ -6,7 +6,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction) {
   const helpEmbed = new EmbedBuilder()
-    .setColor(0x0099FF)
+    .setColor(3050327)
     .setTitle('Help')
     .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
     .setDescription("Bot qui sert à envoyer des points à d'autres membres du discord")
