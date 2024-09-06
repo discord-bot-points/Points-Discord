@@ -12,7 +12,7 @@ function getColor(points: number) {
     return 16766720;
   } else if (points >= 500 && points < 1000) {
     return 16753920;
-  } else if (points > 1000) {
+  } else if (points >= 1000) {
     return 16711680;
   } else {
     return 32768;
@@ -32,6 +32,12 @@ export async function execute(interaction: CommandInteraction) {
   
 
   try {
+    let messageId = interaction.options.getString('messageid');
+
+    if (!messageId && interaction.message && interaction.message.reference) {
+      messageId = interaction.message.reference.messageId;
+    }
+
     let sender = await prisma.user.findUnique({
       where: { discordUsername: senderUsername }
     });
@@ -89,6 +95,7 @@ export async function execute(interaction: CommandInteraction) {
 
     const senderOldBalance = sender.balance;
     const receiverOldBalance = receiver.balance;
+    console.log('Message Id', messageId)
 
     const updatedSender = await prisma.user.update({
       where: { discordUsername: senderUsername },
@@ -150,15 +157,19 @@ export async function execute(interaction: CommandInteraction) {
     )
     .setTimestamp();
 
-
-    await interaction.reply({
-      embeds: [tradeEmbed],
-    });
-
-    await interaction.followUp({
+    if (messageId) {
+      const channel = interaction.channel as TextChannel;
+      const messageToReply = await channel.messages.fetch(messageId);
+      await messageToReply.reply({ embeds: [tradeEmbed] });     
+     } else {
+      await interaction.reply({
+        embeds: [tradeEmbed]
+      });
+      await interaction.followUp({
       embeds: [updatedBalanceEmbed],
       ephemeral: true,
-    })
+      })
+    }
 
     const channelId = '1280461035802984519'
     const channel = interaction.guild?.channels.cache.get(channelId) as TextChannel;
