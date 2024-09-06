@@ -45,8 +45,6 @@ export async function execute(interaction: CommandInteraction) {
       where: { discordUsername: receiverUsername }
     });
 
-    console.log('targetUser', targetUser)
-
     const domainPick = await prisma.domain.findUnique({
       where: { name: domain }
     });
@@ -95,7 +93,7 @@ export async function execute(interaction: CommandInteraction) {
 
     const senderOldBalance = sender.balance;
     const receiverOldBalance = receiver.balance;
-    console.log('Message Id', messageId)
+
 
     const updatedSender = await prisma.user.update({
       where: { discordUsername: senderUsername },
@@ -131,8 +129,12 @@ export async function execute(interaction: CommandInteraction) {
     .addFields(
       { name: '\u2009', value: '\u2009' },
       { name: `${domainPick.name}`, value: `<@${senderUser.id}> a envoyé ${points} points à <@${targetUser.id}>` },
-      { name: '\u2009', value: '\u2009' }
+      { name: '\u2009', value: '\u2009' },
+      ...(description ? [{ name: 'Description', value: description }] : []),
+      { name: '\u2009', value: '\u2009' },
+      ...(link ? [{ name: 'Link', value: link }] : [])
     )
+    .addFields({ name: '\u2009', value: '\u2009' })
     .setTimestamp();
 
     const updatedBalanceEmbed = new EmbedBuilder()
@@ -153,8 +155,12 @@ export async function execute(interaction: CommandInteraction) {
     .addFields(
       { name: '\u2009', value: '\u2009' },
       { name: `${domainPick.name}`, value: `<@${senderUser.id}> a envoyé ${points} points à <@${targetUser.id}>` },
-      { name: '\u2009', value: '\u2009' }
+      { name: '\u2009', value: '\u2009' },
+      ...(description ? [{ name: 'Description', value: description }] : []),
+      { name: '\u2009', value: '\u2009' },
+      ...(link ? [{ name: 'Link', value: link }] : [])
     )
+    .addFields({ name: '\u2009', value: '\u2009' })
     .setTimestamp();
 
     if (messageId) {
