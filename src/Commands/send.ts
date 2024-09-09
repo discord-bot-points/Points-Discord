@@ -1,21 +1,22 @@
 import { PrismaClient, User, Domain, Transaction } from "@prisma/client";
 import { CommandInteraction, SlashCommandBuilder, TextChannel, EmbedBuilder } from "discord.js";
+import { config } from "../config";
 
 const prisma = new PrismaClient();
 
 function getColor(points: number) {
   if (points < 100) {
-    return 32768;
+    return '#FFFAFA'; // Blanc
   } else if (points >= 100 && points < 200) {
-    return 52945;
+    return '#1EFF00'; // Vert
   } else if (points >= 200 && points < 500) {
-    return 16766720;
+    return '#0070DD'; // Bleu
   } else if (points >= 500 && points < 1000) {
-    return 16753920;
+    return '#8A2BE2'; // Violet
   } else if (points >= 1000) {
-    return 16711680;
+    return '#FF8000'; // Orange
   } else {
-    return 32768;
+    return '#FFFAFA'; // Blanc
   }
 }
 export async function execute(interaction: CommandInteraction) {
@@ -30,14 +31,7 @@ export async function execute(interaction: CommandInteraction) {
   const domains = await prisma.domain.findMany();
   const domainsList = domains.map(domain => domain.name).join(', ');
   
-
   try {
-    let messageId = interaction.options.getString('messageid');
-
-    if (!messageId && interaction.message && interaction.message.reference) {
-      messageId = interaction.message.reference.messageId;
-    }
-
     let sender = await prisma.user.findUnique({
       where: { discordUsername: senderUsername }
     });
@@ -94,7 +88,6 @@ export async function execute(interaction: CommandInteraction) {
     const senderOldBalance = sender.balance;
     const receiverOldBalance = receiver.balance;
 
-
     const updatedSender = await prisma.user.update({
       where: { discordUsername: senderUsername },
       data: {
@@ -124,7 +117,7 @@ export async function execute(interaction: CommandInteraction) {
     const color = getColor(points);
 
     const tradeEmbed = new EmbedBuilder()
-    .setColor(color)
+    .setColor(12632256)
     .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
     .addFields(
       { name: '\u2009', value: '\u2009' },
@@ -138,7 +131,7 @@ export async function execute(interaction: CommandInteraction) {
     .setTimestamp();
 
     const updatedBalanceEmbed = new EmbedBuilder()
-    .setColor(color)
+    .setColor(4772300)
     .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
     .addFields(
       { name: '\u2009', value: '\u2009' },
@@ -163,21 +156,19 @@ export async function execute(interaction: CommandInteraction) {
     .addFields({ name: '\u2009', value: '\u2009' })
     .setTimestamp();
 
-    if (messageId) {
-      const channel = interaction.channel as TextChannel;
-      const messageToReply = await channel.messages.fetch(messageId);
-      await messageToReply.reply({ embeds: [tradeEmbed] });     
-     } else {
-      await interaction.reply({
-        embeds: [tradeEmbed]
-      });
-      await interaction.followUp({
+    await interaction.reply({
+      embeds: [tradeEmbed]
+    });
+    await interaction.followUp({
       embeds: [updatedBalanceEmbed],
       ephemeral: true,
-      })
+    })
+    
+    const channelId = config.LOG_CHANNEL_ID;
+    if (!channelId) {
+      console.error("Le canal n'existe pas");
+      return;
     }
-
-    const channelId = '1280461035802984519'
     const channel = interaction.guild?.channels.cache.get(channelId) as TextChannel;
 
     if (channel) {
