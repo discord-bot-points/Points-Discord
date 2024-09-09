@@ -65,11 +65,15 @@ Assurez-vous d'avoir les éléments suivants installés :
 ## Commandes
 
 - **Help**
+  
 `/help` vous permet d'accèder à la rubrique d'aide.
 - **Balance**
+  
 `/balance` vous permet d'afficher votre solde de points THP.
+
 `/balance user` vous permet d'afficher le solde de points d'un autre membre.
 - **Send**
+  
 `/send` vous permet d'envoyer des points à un membre :
   - User : champ obligatoire
   - Points : champ obligatoire
