@@ -6,6 +6,9 @@ const prisma = new PrismaClient()
 async function main() {
  await prisma.user.createMany({
     data: config.userData 
+  });
+  await prisma.domain.createMany({
+    data: config.domainData
   })
 }
 
