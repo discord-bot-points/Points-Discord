@@ -4,15 +4,9 @@ import { config } from "../src/config";
 const prisma = new PrismaClient()
 
 async function main() {
-  const user = await prisma.user.create({
-    data: {
-      discordUsername: config.ADMIN_USER_DISCORD_USERNAME,
-      balance: config.ADMIN_USER_BALANCE,
-      pointsReceived: config.ADMIN_USER_POINTS_RECEIVED,
-      pointsSent: config.ADMIN_USER_POINTS_SENT,
-    },
+ await prisma.user.createMany({
+    data: config.userData 
   })
-  console.log(user)
 }
 
 main()
