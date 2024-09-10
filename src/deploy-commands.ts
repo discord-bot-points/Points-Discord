@@ -40,13 +40,8 @@ export async function getCommandData() {
       option.setName("link")
         .setDescription("Lien de la transaction")
         .setRequired(false)
-    )
-    .addStringOption(option =>
-      option.setName("messageid")
-        .setDescription("Le messageId de référence")
-        .setRequired(false)
     );
-
+    
   const helpCommand = help.data;
   const balanceCommand = balance.data;
   const pingCommand = ping.data;

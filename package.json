@@ -16,6 +16,7 @@
   "scripts":{
     "dev": "tsx watch src/bot.ts",
   "start": "node dist/bot.js",
+  "seed": "ts-node prisma/seed.ts",
   "build": "tsup src/bot.ts --minify"
   }
 }

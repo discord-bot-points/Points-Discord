@@ -5,9 +5,7 @@ import { config } from "../config";
 const prisma = new PrismaClient();
 
 function getColor(points: number) {
-  if (points < 100) {
-    return '#FFFAFA'; // Blanc
-  } else if (points >= 100 && points < 200) {
+  if (points >= 100 && points < 200) {
     return '#1EFF00'; // Vert
   } else if (points >= 200 && points < 500) {
     return '#0070DD'; // Bleu
