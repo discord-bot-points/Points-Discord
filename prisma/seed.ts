@@ -4,7 +4,7 @@ import { config } from "../src/config";
 const prisma = new PrismaClient()
 
 async function main() {
- await prisma.user.createMany({
+  await prisma.user.createMany({
     data: config.userData 
   });
   await prisma.domain.createMany({
