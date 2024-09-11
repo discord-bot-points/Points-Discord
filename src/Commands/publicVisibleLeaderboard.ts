@@ -5,6 +5,8 @@ const prisma = new PrismaClient();
 
 interface User {
   discordUsername: string;
+  discordUserId: String | null; // "| null" to delete if UserId is mandatory
+  discordUserAvatar: String | null; // "| null"to delete if UserId is mandatory
   balance: number;
 }
 
@@ -14,7 +16,7 @@ export const data = new SlashCommandBuilder()
   
 
 export async function execute(interaction: CommandInteraction) {
-  const testUser = "1143626021808124019";
+
   try {
     const topUsers: User[] = await prisma.user.findMany({
       orderBy: {
@@ -41,7 +43,7 @@ export async function execute(interaction: CommandInteraction) {
       const topUserEmbed = new EmbedBuilder()
         .setAuthor({
           name: `${index + 1}  -  ${topUser.discordUsername}  -  ${topUser.balance} points`,
-          iconURL: 'https://cdn.discordapp.com/avatars/1143626021808124019/d711d9b5e1c0dd650ec4290a2fccd3ef.png'
+          iconURL: `${topUser.discordUserAvatar}`
         })
       topUsersEmbed.push(topUserEmbed);
     });
@@ -51,7 +53,7 @@ export async function execute(interaction: CommandInteraction) {
       content: "Top 10 contributeurs :",
       // @ts-ignore
       embeds: topUsersEmbed,
-      ephemeral: true,
+      ephemeral: false,
     });
 
   } catch (error) {

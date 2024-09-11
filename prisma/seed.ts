@@ -10,6 +10,7 @@ async function main() {
   await prisma.domain.createMany({
     data: config.domainData
   })
+  console.log("🎉 2 users created successfully !");
 }
 
 main()
