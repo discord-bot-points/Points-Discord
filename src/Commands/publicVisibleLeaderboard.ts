@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { CommandInteraction, SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } from "discord.js";
 
 const prisma = new PrismaClient();
 
@@ -37,22 +37,37 @@ export async function execute(interaction: CommandInteraction) {
     
 
     // Méthode avec plusieurs embeds
-    // @ts-ignore
-    let topUsersEmbed = [];
+    let topUsersEmbed: EmbedBuilder[] = [];
     topUsers.forEach((topUser, index) => {
+      // Ajouter des emojis pour les trois premiers utilisateurs
+      let emoji = '';
+      if (index === 0) emoji = '🥇';
+      else if (index === 1) emoji = '🥈';
+      else if (index === 2) emoji = '🥉';
+
       const topUserEmbed = new EmbedBuilder()
         .setAuthor({
-          name: `${index + 1}  -  ${topUser.discordUsername}  -  ${topUser.balance} points`,
+          name: `${index + 1}  -  ${topUser.discordUsername}  -  ${topUser.balance} points ${emoji}`,
           iconURL: `${topUser.discordUserAvatar}`
         })
       topUsersEmbed.push(topUserEmbed);
     });
 
+    // Créer un bouton
+    const button = new ButtonBuilder()
+    .setURL("https://github.com/discord-bot-points/Points-Discord")
+    .setLabel('See more details on the web')
+    .setStyle(ButtonStyle.Link)
+    .setDisabled(false)
+
+    // Ajouter le bouton à un ActionRow
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+
     // Répondre à l'interaction avec le texte et les embeds
     await interaction.reply({
       content: "Top 10 contributeurs :",
-      // @ts-ignore
       embeds: topUsersEmbed,
+      components: [row],
       ephemeral: false,
     });
 
