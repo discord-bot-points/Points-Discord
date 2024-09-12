@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 
 interface User {
   discordUsername: string;
-  discordUserId: String | null; // "| null" to delete if UserId is mandatory
-  discordUserAvatar: String | null; // "| null"to delete if UserId is mandatory
+  discordUserId: string | null; // "| null" to delete if UserId is mandatory
+  discordUserAvatar: string | null; // "| null"to delete if UserId is mandatory
   balance: number;
 }
 
 export const data = new SlashCommandBuilder()
-  .setName("public_visible_leaderboard")
+  .setName("public_leaderboard")
   .setDescription("Affiche les top 10 contributeurs")
   
 
@@ -19,9 +19,10 @@ export async function execute(interaction: CommandInteraction) {
 
   try {
     const topUsers: User[] = await prisma.user.findMany({
-      orderBy: {
-        balance: 'desc',
-      },
+      orderBy: [
+        { balance: 'desc' },
+        { discordUsername: 'asc' } // Critère de tri secondaire
+      ],
       take: 10,
     });
     // console.log("Users trouvé", topUsers)
@@ -38,17 +39,24 @@ export async function execute(interaction: CommandInteraction) {
 
     // Méthode avec plusieurs embeds
     let topUsersEmbed: EmbedBuilder[] = [];
+    let currentPosition = 1;
     topUsers.forEach((topUser, index) => {
+      
+      // Déterminer la position
+      if (index > 0 && topUser.balance < topUsers[index - 1].balance) {
+        currentPosition = index + 1;
+      }
+
       // Ajouter des emojis pour les trois premiers utilisateurs
       let emoji = '';
-      if (index === 0) emoji = '🥇';
-      else if (index === 1) emoji = '🥈';
-      else if (index === 2) emoji = '🥉';
+      if (currentPosition === 1) emoji = '🥇';
+      else if (currentPosition === 2) emoji = '🥈';
+      else if (currentPosition === 3) emoji = '🥉';
 
       const topUserEmbed = new EmbedBuilder()
         .setAuthor({
-          name: `${index + 1}  -  ${topUser.discordUsername}  -  ${topUser.balance} points ${emoji}`,
-          iconURL: `${topUser.discordUserAvatar}`
+          name: `${currentPosition}  -  ${topUser.discordUsername}  -  ${topUser.balance} points ${emoji}`,
+          iconURL: topUser.discordUserAvatar || 'https://www.thehackingproject.org/assets/favicon/favicon-32x32-804b12d1c41c60fe721477b7c3b0a32811dc610580dd40ac92f1cc04cbd05ca4.png' //use default image if the user has no avatar store in the database
         })
       topUsersEmbed.push(topUserEmbed);
     });

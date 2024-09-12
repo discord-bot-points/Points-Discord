@@ -6,7 +6,7 @@ import * as help from "./Commands/help";
 import * as balance from "./Commands/balance";
 import * as ping from "./Commands/ping";
 import * as leaderboard from "./Commands/leaderboard";
-import * as public_visible_leaderboard from "./Commands/publicVisibleLeaderboard";
+import * as public_leaderboard from "./Commands/publicLeaderboard";
 
 const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
@@ -48,7 +48,7 @@ export async function getCommandData() {
   const balanceCommand = balance.data;
   const pingCommand = ping.data;
   const leaderboardCommand = leaderboard.data;
-  const publicVisibleLeaderboardCommand = public_visible_leaderboard.data
+  const publicVisibleLeaderboardCommand = public_leaderboard.data
 
   return [sendCommand, helpCommand, balanceCommand, pingCommand, leaderboardCommand, publicVisibleLeaderboardCommand];
 }

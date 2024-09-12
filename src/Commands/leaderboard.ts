@@ -4,7 +4,6 @@ import { CommandInteraction, SlashCommandBuilder, EmbedBuilder, ButtonBuilder, A
 const prisma = new PrismaClient();
 
 interface User {
-  discordUsername: string;
   discordUserId: String | null; // "| null" to delete if UserId is mandatory
   discordUserAvatar: String | null; // "| null" to delete if UserId is mandatory
   balance: number;
@@ -19,9 +18,10 @@ export async function execute(interaction: CommandInteraction) {
 
   try {
     const topUsers: User[] = await prisma.user.findMany({
-      orderBy: {
-        balance: 'desc',
-      },
+      orderBy: [
+        { balance: 'desc' },
+        { discordUsername: 'asc' } // Critère de tri secondaire
+      ],
       take: 10,
     });
     // console.log("Users trouvé", topUsers)
@@ -37,77 +37,49 @@ export async function execute(interaction: CommandInteraction) {
     
 
     //methode avec 1 embed mais plusieur user
-    // const topUsersEmbed = new EmbedBuilder()
-    //   .setColor(4772300)
-    //   .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
-    //   .setTitle('Leaderboard')
-    //   .setDescription('Top 10 contributeurs :')
+    const topUsersEmbed = new EmbedBuilder()
+      .setColor(4772300)
+      .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
+      .setTitle('Leaderboard')
+      .setDescription('Top 10 contributeurs :')
 
-    // let userEmbed = '';
-    // topUsers.forEach((topUser, index) => {
-    //   const position = `${index + 1}`; // Index aligné à gauche
-    //   const username = `<@${topUser.discordUserId}>`; // Tag de l'utilisateur au milieu
-    //   const balance = `**${topUser.balance}** points`; // Balance alignée à droite
-    
-    //   // Ajouter des emojis pour les trois premiers utilisateurs
-    //   let emoji = '';
-    //   if (index === 0) emoji = '🥇';
-    //   else if (index === 1) emoji = '🥈';
-    //   else if (index === 2) emoji = '🥉';
-
-    //   userEmbed += `\`${position}\` ${username} - ${balance} ${emoji} \n`;
-    // });
-      
-    // // Ajouter tous les utilisateurs dans un seul champ
-    // topUsersEmbed.addFields({ name: '\u200B', value: userEmbed });
-    
-    // // Créer un bouton
-    // const button = new ButtonBuilder()
-    // .setURL("https://github.com/discord-bot-points/Points-Discord")
-    // .setLabel('See more details on the web')
-    // .setStyle(ButtonStyle.Link)
-    // .setDisabled(false)
-
-    // // Ajouter le bouton à un ActionRow
-    // const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
-
-    // await interaction.reply({
-    //   embeds: [topUsersEmbed],
-    //   components: [row],
-    //   ephemeral: true,
-    // });
-
-
-    // // Méthode avec plusieurs embeds
-    let topUsersEmbed: EmbedBuilder[] = [];
+    let userEmbed = '';
+    let currentPosition = 1;
     topUsers.forEach((topUser, index) => {
+    
+      // Déterminer la position
+      if (index > 0 && topUser.balance < topUsers[index - 1].balance) {
+        currentPosition = index + 1;
+      }
+
+      // Ajouter des emojis pour les trois premiers utilisateurs
       let emoji = '';
-      if (index === 0) emoji = '🥇';
-      else if (index === 1) emoji = '🥈';
-      else if (index === 2) emoji = '🥉';
+      if (currentPosition === 1) emoji = '🥇';
+      else if (currentPosition === 2) emoji = '🥈';
+      else if (currentPosition === 3) emoji = '🥉';
 
-      const topUserEmbed = new EmbedBuilder()
-        .setDescription(`${index + 1} - <@${topUser.discordUserId}> - **${topUser.balance} points** ${emoji}`);
-      topUsersEmbed.push(topUserEmbed);
+      userEmbed += `\`${currentPosition}\` <@${topUser.discordUserId}> - **${topUser.balance}** points ${emoji} \n`;
     });
-
+      
+    // Ajouter tous les utilisateurs dans un seul champ
+    topUsersEmbed.addFields({ name: '\u200B', value: userEmbed });
+    
     // Créer un bouton
     const button = new ButtonBuilder()
-      .setURL("https://github.com/discord-bot-points/Points-Discord")
-      .setLabel('See more details on the web')
-      .setStyle(ButtonStyle.Link)
-      .setDisabled(false)
+    .setURL("https://github.com/discord-bot-points/Points-Discord")
+    .setLabel('See more details on the web')
+    .setStyle(ButtonStyle.Link)
+    .setDisabled(false)
 
     // Ajouter le bouton à un ActionRow
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-    // Répondre à l'interaction avec le texte et les embeds
     await interaction.reply({
-      content: "Top 10 contributeurs :",
-      embeds: topUsersEmbed,
+      embeds: [topUsersEmbed],
       components: [row],
       ephemeral: true,
     });
+
 
   } catch (error) {
     console.error('Erreur lors de la récupération des contributeurs', error);
