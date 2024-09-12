@@ -76,7 +76,7 @@ export async function execute(interaction: CommandInteraction) {
       content: "Top 10 contributeurs :",
       embeds: topUsersEmbed,
       components: [row],
-      ephemeral: false,
+      ephemeral: true,
     });
 
   } catch (error) {

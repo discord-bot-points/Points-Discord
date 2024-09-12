@@ -43,14 +43,44 @@ export async function getCommandData() {
         .setDescription("Lien de la transaction")
         .setRequired(false)
     );
+
+    const generateCommand = new SlashCommandBuilder()
+    .setName("generate")
+    .setDescription("Envoie des points à un autre utilisateur")
+    .addUserOption(option =>
+      option.setName("user")
+        .setDescription("La personne qui va recevoir les points")
+        .setRequired(true)
+    )
+    .addNumberOption(option =>
+      option.setName("points")
+        .setDescription("Le nombre de points que vous voulez envoyer")
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option.setName("domain")
+        .setDescription("Le domaine de la transaction")
+        .addChoices(...domains)
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option.setName("description")
+        .setDescription("La description de la transaction")
+        .setRequired(false)
+    )
+    .addStringOption(option =>
+      option.setName("link")
+        .setDescription("Lien de la transaction")
+        .setRequired(false)
+    );
     
   const helpCommand = help.data;
   const balanceCommand = balance.data;
   const pingCommand = ping.data;
   const leaderboardCommand = leaderboard.data;
-  const publicVisibleLeaderboardCommand = public_leaderboard.data
+  const publicLeaderboardCommand = public_leaderboard.data
 
-  return [sendCommand, helpCommand, balanceCommand, pingCommand, leaderboardCommand, publicVisibleLeaderboardCommand];
+  return [sendCommand, generateCommand, helpCommand, balanceCommand, pingCommand, leaderboardCommand, publicLeaderboardCommand];
 }
 
 type DeployCommandsProps = {
