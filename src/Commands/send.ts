@@ -19,12 +19,19 @@ function getColor(points: number) {
 }
 export async function execute(interaction: CommandInteraction) {
   const targetUser = interaction.options.getUser('user');
+  if (!targetUser) {
+    return interaction.reply({ content: 'User not found', ephemeral: true });
+  }
   const receiverUsername = targetUser.username;
+  const receiverUserId = targetUser.id;
+  const receiverUserAvatarURL = targetUser.displayAvatarURL({ extension: 'webp', size: 128 });
   const points = interaction.options.getNumber('points');
   const domain = interaction.options.getString('domain');
   const description = interaction.options.getString('description') ?? '';
   const link = interaction.options.getString('link') ?? '';
   const senderUsername = interaction.user.username;
+  const senderUserId = interaction.user.id;
+  const senderUserAvatarURL = interaction.user.displayAvatarURL({ extension: 'webp', size: 128 });
   const senderUser = interaction.user;
   const domains = await prisma.domain.findMany();
   const domainsList = domains.map(domain => domain.name).join(', ');
@@ -41,11 +48,32 @@ export async function execute(interaction: CommandInteraction) {
       where: { name: domain }
     });
 
+    //verify users avatar in the database, if not up to date then update
+    if(sender && sender.discordUserAvatar !== senderUserAvatarURL){
+      sender = await prisma.user.update({
+        where: { discordUsername: senderUsername },
+        data: {
+          discordUserAvatar: senderUserAvatarURL,
+        },
+      });
+    };
+
+    if(receiver && receiver.discordUserAvatar !== receiverUserAvatarURL){
+      receiver = await prisma.user.update({
+        where: { discordUsername: receiverUsername },
+        data: {
+          discordUserAvatar: receiverUserAvatarURL,
+        },
+      });
+    };
+    
     if (!sender) {
       console.log("Utilisateur non trouvé, création...");
       sender = await prisma.user.create({
         data: {
           discordUsername: senderUsername,
+          discordUserId: senderUserId,
+          discordUserAvatar: senderUserAvatarURL,
           balance: 0,
           pointsSent: 0,
           pointsReceived: 0,
@@ -59,6 +87,8 @@ export async function execute(interaction: CommandInteraction) {
       receiver = await prisma.user.create({
         data: {
           discordUsername: receiverUsername,
+          discordUserId: receiverUserId,
+          discordUserAvatar: receiverUserAvatarURL,
           balance: 0,
           pointsSent: 0,
           pointsReceived: 0,
@@ -153,7 +183,7 @@ export async function execute(interaction: CommandInteraction) {
     )
     .addFields({ name: '\u2009', value: '\u2009' })
     .setTimestamp();
-
+    console.log(receiverUserAvatarURL);
     await interaction.reply({
       embeds: [tradeEmbed]
     });
