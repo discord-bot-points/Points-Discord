@@ -66,7 +66,7 @@ export async function execute(interaction: CommandInteraction) {
         },
       });
     };
-    
+
     if (!sender) {
       console.log("Utilisateur non trouvé, création...");
       sender = await prisma.user.create({
@@ -183,7 +183,7 @@ export async function execute(interaction: CommandInteraction) {
     )
     .addFields({ name: '\u2009', value: '\u2009' })
     .setTimestamp();
-    console.log(receiverUserAvatarURL);
+    
     await interaction.reply({
       embeds: [tradeEmbed]
     });
