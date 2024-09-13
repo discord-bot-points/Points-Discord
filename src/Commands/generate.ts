@@ -110,6 +110,8 @@ export async function execute(interaction: CommandInteraction) {
         description: description,
         link: link,
         domainId: domainPick.name,
+        personalUsage: false,
+        toRepay: false
       },
     });
 

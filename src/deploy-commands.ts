@@ -35,9 +35,15 @@ export async function getCommandData() {
         .setRequired(true)
     )
     .addStringOption(option =>
+      option.setName("transaction")
+        .setDescription("Indiquer s'il s'agit d'une utilisation personnelle des points ou pour la communauté")
+        .addChoices({ name: "Personnelle", value: "Perso" }, { name: "THP", value: "Communautaire" })
+        .setRequired(true)
+    )
+    .addStringOption(option =>
       option.setName("description")
         .setDescription("La description de la transaction")
-        .setRequired(false)
+        .setRequired(true)
     )
     .addStringOption(option =>
       option.setName("link")
