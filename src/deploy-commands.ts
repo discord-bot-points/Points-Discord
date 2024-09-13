@@ -22,7 +22,7 @@ export async function getCommandData() {
         .setDescription("La personne qui va recevoir les points")
         .setRequired(true)
     )
-    .addNumberOption(option =>
+    .addIntegerOption(option =>
       option.setName("points")
         .setDescription("Le nombre de points que vous voulez envoyer")
         .setRequired(true)
@@ -59,7 +59,7 @@ export async function getCommandData() {
         .setDescription("La personne qui va recevoir les points")
         .setRequired(true)
     )
-    .addNumberOption(option =>
+    .addIntegerOption(option =>
       option.setName("points")
         .setDescription("Le nombre de points que vous voulez envoyer")
         .setRequired(true)
