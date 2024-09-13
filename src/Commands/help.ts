@@ -12,7 +12,7 @@ export async function execute(interaction: CommandInteraction) {
     .setDescription("Bot qui sert à envoyer des points à d'autres membres du discord")
     .addFields(
       { name: '\u2009', value: '\u2009' },
-      { name: 'Commands', value: 'type `/balance` to see your balance \n type `/send` to open the send options' },
+      { name: 'Commands', value: 'type `/balance` to see your balance \n type `/send` to open the send options \n type `/leaderboard` to see the leaderboard \n type `/public-leaderboard` to see the public leaderboard' },
       { name: '\u2009', value: '\u2009' }
     )
     .setTimestamp();
