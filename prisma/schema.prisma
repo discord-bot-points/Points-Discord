@@ -34,6 +34,10 @@ model Transaction {
   domainId String
   personalUsage Boolean
   toRepay Boolean
+
+  parentTransaction Transaction? @relation("TransactionSelfRelation", fields: [parentTransactionId], references: [id])
+  parentTransactionId Int?
+  childTransactions Transaction[] @relation("TransactionSelfRelation")
 }
 
 model Domain {

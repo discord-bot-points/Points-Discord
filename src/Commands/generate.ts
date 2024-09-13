@@ -16,6 +16,7 @@ export async function execute(interaction: CommandInteraction) {
   const domain = interaction.options.getString('domain');
   const description = interaction.options.getString('description') ?? '';
   const link = interaction.options.getString('link') ?? '';
+  const transactionId = interaction.options.getInteger('référence') ?? '';
   const senderUsername = interaction.user.username;
   const senderUserId = interaction.user.id;
   const senderUserAvatarURL = interaction.user.displayAvatarURL({ extension: 'webp', size: 128 });
@@ -34,6 +35,7 @@ export async function execute(interaction: CommandInteraction) {
     const domainPick = await prisma.domain.findUnique({
       where: { name: domain }
     });
+
 
     //verify users avatar in the database, if not up to date then update
     if(sender && sender.discordUserAvatar !== senderUserAvatarURL){
@@ -102,7 +104,7 @@ export async function execute(interaction: CommandInteraction) {
       },
     });
 
-    await prisma.transaction.create({
+    const testId = await prisma.transaction.create({
       data: {
         senderId: sender.discordUsername,
         receiverId: receiver.discordUsername,
@@ -111,9 +113,19 @@ export async function execute(interaction: CommandInteraction) {
         link: link,
         domainId: domainPick.name,
         personalUsage: false,
-        toRepay: false
+        toRepay: false,
       },
     });
+
+    if (transactionId) {
+      await prisma.transaction.update({
+        where: { id: transactionId },
+        data: {
+          toRepay: false,
+          parentTransactionId: testId ? testId.id : null
+        }
+      })
+    }
 
     const generateEmbed = new EmbedBuilder()
     .setColor(16766720)
