@@ -12,6 +12,8 @@ datasource db {
 
 model User {
   discordUsername String  @id
+  discordUserId String?
+  discordUserAvatar String?
   sent Transaction[] @relation("sender")
   received Transaction[] @relation("receiver")
   pointsSent Int

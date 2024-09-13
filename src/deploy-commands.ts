@@ -5,6 +5,8 @@ import { fetchDomains } from "./Db/fetch_domain";
 import * as help from "./Commands/help";
 import * as balance from "./Commands/balance";
 import * as ping from "./Commands/ping";
+import * as leaderboard from "./Commands/leaderboard";
+import * as public_leaderboard from "./Commands/publicLeaderboard";
 
 const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
@@ -75,8 +77,10 @@ export async function getCommandData() {
   const helpCommand = help.data;
   const balanceCommand = balance.data;
   const pingCommand = ping.data;
+  const leaderboardCommand = leaderboard.data;
+  const publicLeaderboardCommand = public_leaderboard.data
 
-  return [sendCommand, generateCommand, helpCommand, balanceCommand, pingCommand];
+  return [sendCommand, generateCommand, helpCommand, balanceCommand, pingCommand, leaderboardCommand, publicLeaderboardCommand];
 }
 
 type DeployCommandsProps = {
