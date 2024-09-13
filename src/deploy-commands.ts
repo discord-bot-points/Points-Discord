@@ -26,6 +26,7 @@ export async function getCommandData() {
       option.setName("points")
         .setDescription("Le nombre de points que vous voulez envoyer")
         .setRequired(true)
+        .setMinValue(1)
     )
     .addStringOption(option =>
       option.setName("domain")
@@ -56,6 +57,7 @@ export async function getCommandData() {
       option.setName("points")
         .setDescription("Le nombre de points que vous voulez envoyer")
         .setRequired(true)
+        .setMinValue(1)
     )
     .addStringOption(option =>
       option.setName("domain")
