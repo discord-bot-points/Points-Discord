@@ -71,6 +71,11 @@ export async function getCommandData() {
         .addChoices(...domains)
         .setRequired(true)
     )
+    .addIntegerOption(option =>
+      option.setName("référence")
+        .setDescription("La référence de la transaction")
+        .setRequired(false)
+    )
     .addStringOption(option =>
       option.setName("description")
         .setDescription("La description de la transaction")
