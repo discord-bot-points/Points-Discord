@@ -1,7 +1,6 @@
 import { PrismaClient, User, Domain, Transaction } from "@prisma/client";
 import { CommandInteraction, SlashCommandBuilder, TextChannel, EmbedBuilder } from "discord.js";
 import { config } from "../config";
-import { send } from "process";
 
 const prisma = new PrismaClient();
 
@@ -68,7 +67,6 @@ export async function execute(interaction: CommandInteraction) {
         },
       });
       console.log("Utilisateur créé", sender);
-      interaction.reply({ content: 'Sender pas trouvé, utilisateur créé', ephemeral: true });
     }
 
     if (!receiver) {
@@ -84,7 +82,6 @@ export async function execute(interaction: CommandInteraction) {
         },
       });
       console.log("Utilisateur créé", receiver);
-      interaction.reply({ content: 'Receiver pas trouvé, utilisateur créé', ephemeral: true });
     }
 
     if (!domainPick) {
