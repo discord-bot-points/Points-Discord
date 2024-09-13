@@ -12,7 +12,7 @@ export async function execute(interaction: CommandInteraction) {
   const receiverUsername = targetUser.username;
   const receiverUserId = targetUser.id;
   const receiverUserAvatarURL = targetUser.displayAvatarURL({ extension: 'webp', size: 128 });
-  const points = interaction.options.getNumber('points');
+  const points = interaction.options.getInteger('points');
   const domain = interaction.options.getString('domain');
   const description = interaction.options.getString('description') ?? '';
   const link = interaction.options.getString('link') ?? '';
@@ -110,6 +110,8 @@ export async function execute(interaction: CommandInteraction) {
         description: description,
         link: link,
         domainId: domainPick.name,
+        personalUsage: false,
+        toRepay: false
       },
     });
 

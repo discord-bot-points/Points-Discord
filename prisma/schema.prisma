@@ -32,7 +32,10 @@ model Transaction {
   link String
   domain Domain @relation(fields: [domainId], references: [name])
   domainId String
+  personalUsage Boolean
+  toRepay Boolean
 }
+
 model Domain {
   name String @id
   transactions Transaction[]
