@@ -9,7 +9,7 @@ Cette commande permet à un utilisateur (administrateur ou délégué) de géné
 /generate user:<@user> points:<integer> domain:<string> description:<string> link:<string> référence:<integer>
 ```
 
-### paramètres
+### Paramètres
 - `user` (**obligatoire**) : Le destinataire (`receiver`) des points générés.
 - `points` (**obligatoire**) : Le nombre de points à générer pour l'utilisateur spécifié.
 - `domain` (**obligatoire**) : Le domaine dans lequel les points sont générés. Ce domaine doit exister dans la base de données.
