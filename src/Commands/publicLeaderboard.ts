@@ -21,13 +21,12 @@ export async function execute(interaction: CommandInteraction) {
     const topUsers: User[] = await prisma.user.findMany({
       orderBy: [
         { balance: 'desc' },
-        { discordUsername: 'asc' } // Critère de tri secondaire
+        { discordUsername: 'asc' } // secondary sorting criteria
       ],
       take: 10,
     });
-    // console.log("Users trouvé", topUsers)
 
-    //s'il n'y a aucun user dans la database
+    //if there is no user in the database
     if (topUsers.length === 0) {
       await interaction.reply({
         content: "Il n'y a aucun utilisateur dans la base de données.",
@@ -37,17 +36,18 @@ export async function execute(interaction: CommandInteraction) {
     }
     
 
-    // Méthode avec plusieurs embeds
+    // Method with many embeds
     let topUsersEmbed: EmbedBuilder[] = [];
     let currentPosition = 1;
+    //iterate the array to create 1 embed for each user
     topUsers.forEach((topUser, index) => {
       
-      // Déterminer la position
+      // determinate the position of each user
       if (index > 0 && topUser.balance < topUsers[index - 1].balance) {
         currentPosition = index + 1;
       }
 
-      // Ajouter des emojis pour les trois premiers utilisateurs
+      // Adding emojis only on the 3 first positions
       let emoji = '';
       if (currentPosition === 1) emoji = '🥇';
       else if (currentPosition === 2) emoji = '🥈';
@@ -61,17 +61,17 @@ export async function execute(interaction: CommandInteraction) {
       topUsersEmbed.push(topUserEmbed);
     });
 
-    // Créer un bouton
+    // Create a button
     const button = new ButtonBuilder()
     .setURL("https://github.com/discord-bot-points/Points-Discord")
     .setLabel('See more details on the web')
     .setStyle(ButtonStyle.Link)
     .setDisabled(false)
 
-    // Ajouter le bouton à un ActionRow
+    // Adding the button in the ActionRow
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-    // Répondre à l'interaction avec le texte et les embeds
+    // Reply to interaction with text and embeds
     await interaction.reply({
       content: "Top 10 contributeurs :",
       embeds: topUsersEmbed,
