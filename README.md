@@ -62,22 +62,15 @@ Assurez-vous d'avoir les éléments suivants installés :
     pnpm run dev
     ```
 
-## Commandes
+## Documentations des commandes :
 
-- **Help**
+- [**Help**](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/help.md)
   
-`/help` vous permet d'accèder à la rubrique d'aide.
-- **Balance**
+- [**Balance**](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/balance.md)
   
-`/balance` vous permet d'afficher votre solde de points THP.
+- [**Send**](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/send.md)
 
-`/balance user` vous permet d'afficher le solde de points d'un autre membre.
-- **Send**
-
-  [Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/send.md)
-
-- **Generate**
-[Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/generate.md)
+- [**Generate**](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/generate.md)
 
 ## Contributeurs :
 Merci à tous ceux qui ont contribué à ce projet !
