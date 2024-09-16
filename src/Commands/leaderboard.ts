@@ -15,18 +15,17 @@ export const data = new SlashCommandBuilder()
   
 
 export async function execute(interaction: CommandInteraction) {
-
+  // find users in database and store them in topUsers
   try {
     const topUsers: User[] = await prisma.user.findMany({
       orderBy: [
         { balance: 'desc' },
-        { discordUsername: 'asc' } // Critère de tri secondaire
+        { discordUsername: 'asc' } // secondary sorting criteria
       ],
       take: 10,
     });
-    // console.log("Users trouvé", topUsers)
 
-    //s'il n'y a aucun user dans la database
+    //if there is no user in the database
     if (topUsers.length === 0) {
       await interaction.reply({
         content: "Il n'y a aucun utilisateur dans la base de données.",
@@ -36,7 +35,7 @@ export async function execute(interaction: CommandInteraction) {
     }
     
 
-    //methode avec 1 embed mais plusieur user
+    //methode with 1 embed but many users
     const topUsersEmbed = new EmbedBuilder()
       .setColor(4772300)
       .setAuthor({ name: 'THP', iconURL: 'https://i.imgur.com/uG945fE.png', url: 'https://www.thehackingproject.org/' })
@@ -45,33 +44,34 @@ export async function execute(interaction: CommandInteraction) {
 
     let userEmbed = '';
     let currentPosition = 1;
+    //iterate the array to create only 1 embed with many users
     topUsers.forEach((topUser, index) => {
     
-      // Déterminer la position
+      // determinate the position of each user
       if (index > 0 && topUser.balance < topUsers[index - 1].balance) {
         currentPosition = index + 1;
       }
 
-      // Ajouter des emojis pour les trois premiers utilisateurs
+      // Adding emojis only on the 3 first positions
       let emoji = '';
       if (currentPosition === 1) emoji = '🥇';
       else if (currentPosition === 2) emoji = '🥈';
       else if (currentPosition === 3) emoji = '🥉';
-
+      
       userEmbed += `\`${currentPosition}\` <@${topUser.discordUserId}> - **${topUser.balance}** points ${emoji} \n`;
     });
-      
-    // Ajouter tous les utilisateurs dans un seul champ
+
+    // Adding every user in one field
     topUsersEmbed.addFields({ name: '\u200B', value: userEmbed });
-    
-    // Créer un bouton
+
+    // Create a button
     const button = new ButtonBuilder()
     .setURL("https://github.com/discord-bot-points/Points-Discord")
     .setLabel('See more details on the web')
     .setStyle(ButtonStyle.Link)
     .setDisabled(false)
 
-    // Ajouter le bouton à un ActionRow
+    // Adding the button in the ActionRow
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
     await interaction.reply({
