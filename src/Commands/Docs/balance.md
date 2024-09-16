@@ -2,11 +2,10 @@
 
 ## Table des matières
 1. Aperçu général
-2. Prérequis
-3. Fonctionnement de la commande
-4. Utilisation de Prisma
-5. Création et envoi d'un Embed
-6. Gestion des erreurs
+2. Fonctionnement de la commande
+3. Utilisation de Prisma
+4. Création et envoi d'un Embed
+5. Gestion des erreurs
 
 ## 1. Aperçu général
 
