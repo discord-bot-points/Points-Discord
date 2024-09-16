@@ -22,42 +22,42 @@ La commande `/send` permet à un utilisateur d'envoyer un certain nombre de poin
 
 1. Vérification des utilisateurs :
 
-  - La commande vérifie si l'utilisateur qui envoie les points (`sender`) et l'utilisateur qui les reçoit (`receiver`) existent dans la base de données Prisma. Si l'un des deux n'existe pas, il est créé avec un solde initial de `0` points.
-  - Si l'avatar Discord de l'utilisateur est différent de celui enregistré dans la base de données Prisma, il est mis à jour.
+    - La commande vérifie si l'utilisateur qui envoie les points (`sender`) et l'utilisateur qui les reçoit (`receiver`) existent dans la base de données Prisma. Si l'un des deux n'existe pas, il est créé avec un solde initial de `0` points.
+    - Si l'avatar Discord de l'utilisateur est différent de celui enregistré dans la base de données Prisma, il est mis à jour.
 
 2. Vérification du domaine :
 
-  - La commande vérifie que le domaine existe dans la base de données. Si ce n'est pas le cas, elle renvoie un message avec la liste des domaines existants (Ne devrait pas apparaître puisque la liste des domaines provient de Prisma directement).
+    - La commande vérifie que le domaine existe dans la base de données. Si ce n'est pas le cas, elle renvoie un message avec la liste des domaines existants (Ne devrait pas apparaître puisque la liste des domaines provient de Prisma directement).
 
 3. Vérification du solde :
 
-  - La commande compare le solde de l'utilisateur `sender` avec les points à envoyer. Si l'utilisateur n'a pas assez de points, un message d'erreur est renvoyé.
+    - La commande compare le solde de l'utilisateur `sender` avec les points à envoyer. Si l'utilisateur n'a pas assez de points, un message d'erreur est renvoyé.
 
 4. Mise à jour des soldes :
 
-  - Si toutes les vérifications passent, les soldes des deux utilisateurs sont mis à jour : le solde du `sender` est décrémenté tandis que celui du `receiver` est incrémenté.
+    - Si toutes les vérifications passent, les soldes des deux utilisateurs sont mis à jour : le solde du `sender` est décrémenté tandis que celui du `receiver` est incrémenté.
 
 5. Enregistrement de la transaction :
 
-  - Une nouvelle transaction est créée dans la base de données Prisma avec les informations suivantes : `senderId`, `receiverId`, `points`, `description`, `link` (si existant), `domainId` et le type de la transaction `usage`.
+    - Une nouvelle transaction est créée dans la base de données Prisma avec les informations suivantes : `senderId`, `receiverId`, `points`, `description`, `link` (si existant), `domainId` et le type de la transaction `usage`.
 
 6. Affichage des résultats :
 
-  - **Embed de la transaction** : Un message est envoyé dans le canal où la commande a été appelée, contenant un résumé de la transaction.
-  - **Embed de mise à jour du solde** : Un second message est envoyé à l'utilisateur exécutant la commande, avec une mise à jour de son solde et celui du destinataire (éphemeral).
-  - **Embed de logs** : Une copie de l'embed de la transaction est envoyé dans un canal de logs spécifique pour garder une trace des transactions.
+    - **Embed de la transaction** : Un message est envoyé dans le canal où la commande a été appelée, contenant un résumé de la transaction.
+    - **Embed de mise à jour du solde** : Un second message est envoyé à l'utilisateur exécutant la commande, avec une mise à jour de son solde et celui du destinataire (éphemeral).
+    - **Embed de logs** : Une copie de l'embed de la transaction est envoyé dans un canal de logs spécifique pour garder une trace des transactions.
 
 ### Embeds
 
 1. `tradeEmbed` :
-  - Embed affiché à tous les utilisateurs du canal où la commande est utilisée.
-  - Contient les utilisateurs `sender` et `receiver`, le montant de points envoyés, le domaine selectionné, la description de la transaction et, si disponible, un lien lié à la transaction.
+    - Embed affiché à tous les utilisateurs du canal où la commande est utilisée.
+    - Contient les utilisateurs `sender` et `receiver`, le montant de points envoyés, le domaine selectionné, la description de la transaction et, si disponible, un lien lié à la transaction.
 
 2. `updatedBalanceEmbed` (*éphémère*) :
-  - Embed affiché uniquement à l'utilisateur exécutant la commande, avec une mise à jour de son solde ainsi que celui du destinataire.
+    - Embed affiché uniquement à l'utilisateur exécutant la commande, avec une mise à jour de son solde ainsi que celui du destinataire.
 
 3. `logsEmbed` :
-  - Copie du tradeEmbed envoyé dans un canal dédié.     
+    - Copie du tradeEmbed envoyé dans un canal dédié.     
 
 ### Gestion des erreurs
 
