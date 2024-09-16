@@ -75,6 +75,9 @@ Assurez-vous d'avoir les éléments suivants installés :
 - **Send**
   [Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/send.md)
 
+- **Generate**
+[Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/generate.md)
+
 ## Contributeurs :
 Merci à tous ceux qui ont contribué à ce projet !
 - [Alexia Scherer](https://github.com/evarellapucky)
