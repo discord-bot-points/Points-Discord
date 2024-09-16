@@ -73,17 +73,14 @@ Assurez-vous d'avoir les éléments suivants installés :
 
 `/balance user` vous permet d'afficher le solde de points d'un autre membre.
 - **Send**
-  
-`/send` vous permet d'envoyer des points à un membre :
-  - User : champ obligatoire
-  - Points : champ obligatoire
-  - Domain : champ obligatoire
-  - Description : champ facultatif
-  - Link : champ facultatif
+  [Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/send.md)
 
 ## Contributeurs :
 Merci à tous ceux qui ont contribué à ce projet !
-- [@Alexia Scherer](https://github.com/evarellapucky)
-- [@Yann Rezigui](https://github.com/YannRZG)
-- [@Raphaël Marcarini](https://github.com/Marcaraph)
-- [@Jeremie Olivier](https://github.com/jeremie-olivier)
+- [Alexia Scherer](https://github.com/evarellapucky)
+- [Yann Rezigui](https://github.com/YannRZG)
+- [Raphaël Marcarini](https://github.com/Marcaraph)
+- [Jeremie Olivier](https://github.com/jeremie-olivier)
+- [Malo Bastianelli](https://github.com/Korblen)
+- [Tommy Pellerin](https://github.com/tommy-pellerin)
+- [Sasha Godel](https://github.com/MacDuPain)
