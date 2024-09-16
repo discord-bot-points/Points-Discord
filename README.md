@@ -73,6 +73,7 @@ Assurez-vous d'avoir les éléments suivants installés :
 
 `/balance user` vous permet d'afficher le solde de points d'un autre membre.
 - **Send**
+
   [Voir la documentation](https://github.com/discord-bot-points/Points-Discord/blob/main/src/Commands/Docs/send.md)
 
 ## Contributeurs :
