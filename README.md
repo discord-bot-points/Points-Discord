@@ -55,9 +55,9 @@ Assurez-vous d'avoir les éléments suivants installés :
     
 3. **Créer le fichier .env** :
 
-    Créer un fichier .env qui reprend les variables du fichier .env.example en remplaçant les exemples par vos propres variables.
+    Créer un fichier .env qui reprend les variables du fichier .env.example en remplaçant les exemples par vos propres variables. La seed de base gère la création de 2 utilisateurs et 3 domaines. Si vous souhaitez en créer davantage, il vous suffit de copier les variables existantes dans le env.example et de rajouter les variables créées dans le [config.ts](https://github.com/discord-bot-points/Points-Discord/blob/main/src/config.ts).
 
-4. **Lancer la seed pour créer votre base de données** :
+4. **Créer les migrations et lancer la seed pour créer votre base de données** :
 
     ```bash
     npx prisma migrate dev
